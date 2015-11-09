@@ -20,6 +20,9 @@ function renderAttack(at) {
     } else if (at['state'] == 'done') {
 	td.addClass('done-attack');
 	td.text(at['stars'] + "*");
+	if (at['stars'] == 3) {
+	    $(".base_" + at['base']).hide();
+	}
     } else {
 	alert(at);
     }
@@ -34,6 +37,9 @@ function renderPlan(data) {
     $('.missing-base').removeClass('missing-base');
     $.each(data['missing'],
 	   function(index, value) { $(value).addClass('missing-base'); });
+    $.each(data['finished'],
+	   function(index, value) { $('.index_' + value).hide() });
+    
 }
 
 function setupPlan() {

@@ -88,7 +88,7 @@ class WarsController < ApplicationController
       taken[w] = Array.new(@war.count, nil)
       w.plans.each do |p|
         hash = {index: w.index, base: p.base, state: p.state}
-        hash[:stars] = p.stars
+        hash[:stars] = p.stars if p.state == 'done'
         @plan.append(hash)
         taken[w][p.base] = p.state
       end
@@ -104,6 +104,14 @@ class WarsController < ApplicationController
     end
 
     @missing = Array.new
+    nr_finished = Hash.new
+    @plan.select { |p| p[:state] == 'done' }.each do |p|
+      nr_finished[p[:index]] = (nr_finished[p[:index]] || 0) + 1
+    end
+    @finished = Array.new
+    nr_finished.each { |index, nr|
+      @finished << index if nr == 2 
+    }
     @war.count.times do |i|
       i += 1
       if @plan.select { |p| p[:index] == i && p[:state] != 'no' }.empty?
