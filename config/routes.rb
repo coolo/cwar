@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 
   post 'main/war' => 'main#set_user'
   get 'main/war' => 'main#war', as: :current
+  get '/plan' => 'main#current_plan'
   
   patch 'main/estimate' => 'main#estimate'
   

@@ -28,13 +28,6 @@ ActiveRecord::Schema.define(version: 20151026123725) do
     t.string   "name"
   end
 
-  create_table "users_wars", id: false, force: :cascade do |t|
-    t.integer "war_id",  null: false
-    t.integer "user_id", null: false
-  end
-
-  add_index "users_wars", ["user_id", "war_id"], name: "index_users_wars_on_user_id_and_war_id", unique: true
-
   create_table "warriors", force: :cascade do |t|
     t.integer  "war_id"
     t.integer  "user_id"
