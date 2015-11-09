@@ -1,6 +1,6 @@
 class WarsController < ApplicationController
   before_action :set_war, only: [:show, :edit, :update, :destroy,
-                                 :plan, :update_attack, :ajax_plan]
+                                 :plan, :update_attack, :ajax_plan, :freeze]
 
   # GET /wars
   # GET /wars.json
@@ -80,7 +80,7 @@ class WarsController < ApplicationController
     ajax_plan
   end
 
-  def ajax_plan
+  def _calc_plan
     @plan = Array.new
     taken = Hash.new
     @warriors.each do |w|
@@ -90,10 +90,16 @@ class WarsController < ApplicationController
         taken[w][p.base] = p.state
       end
     end
+    taken
+  end
+  
+  def ajax_plan
+    taken = _calc_plan
     @war.strategy(taken).each do |w,b|
       next if taken[w][b]
       @plan.append({index: w.index, base: b, state: 'sug'})
     end
+
     @missing = Array.new
     @war.count.times do |i|
       i += 1
@@ -109,6 +115,22 @@ class WarsController < ApplicationController
   
   def plan
     @plan = []
+  end
+
+  def freeze
+    taken = _calc_plan
+    @war.strategy(taken).each do |w,b|
+      plan = w.plans.create(base: b, state: 'sure')
+    end
+    # ignore blacklist
+    Plan.where(warrior_id: @war.warriors, state: 'no').delete_all
+    @war.started = true
+    @war.save
+    redirect_to plan_war_path(@war)
+  end
+
+  def result
+    render json: {}
   end
   
   private

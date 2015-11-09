@@ -38,12 +38,9 @@ function setupPlan() {
 	$('.attack').click(function() {
 	    var state = 'def';
 	    if ($(this).hasClass('no-attack')) {
-		//$(this).removeClass('sure-attack').removeClass('no-attack');
 	    } else if ($(this).hasClass('sure-attack')) {
-		//$(this).addClass('no-attack').removeClass('sure-attack');
 		state = 'no';
 	    } else {
-		//$(this).addClass('sure-attack').removeClass('no-attack');
 		state = 'sure';
 	    }
 	    $.post($('#plan').data('post-url'),
@@ -53,6 +50,30 @@ function setupPlan() {
 		   }, renderPlan);
 	    return false;
 	});
+	$.get($('#plan').data('get-url'), renderPlan);
     });
-    $.get($('#plan').data('get-url'), renderPlan);
+}
+
+function setupStartedWar() {
+    $(document).ready( function() {
+	$('#submit_result').click(function(e){
+	    e.preventDefault();
+	    $.post($('#finishedModal form').attr('action'),
+		   { index: $('#warrior-index').val(),
+		     base: $('#enemy-index').val(),
+		     percent: $('#percent').val(),
+		     townhall: $('#townhall').val()
+		   });
+	    $('#finishedModal').modal('hide');
+	});
+				 
+	$('.attack').click(function() {
+	    $('#warrior-name').text($(this).parent('tr').find('td:first').data('name'));
+	    $('#enemy-name').text($(this).data('base'));
+	    $('#warrior-index').val($(this).data('index'));
+	    $('#enemy-index').val($(this).data('base'));
+	    $('#finishedModal').modal('show');
+	});
+	$.get($('#plan').data('get-url'), renderPlan);
+    });
 }
