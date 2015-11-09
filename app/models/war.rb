@@ -22,7 +22,7 @@ class War < ActiveRecord::Base
 
   def _warrior_busy(bases)
     bases.each do |b|
-      return true if b
+      return true if b == 'sure'
     end
     false
   end
@@ -39,7 +39,7 @@ class War < ActiveRecord::Base
     sorted.each do |w|
       next if _warrior_busy(taken[w])
       next_base = 1
-      while next_base < self.count && (attacked[next_base] || w.average(next_base-1) < 2.5)
+      while next_base <= self.count && (taken[w][next_base] == "no" || attacked[next_base] || w.average(next_base-1) < 2.5)
         next_base += 1
       end
       attacked[next_base] = 1
