@@ -117,7 +117,7 @@ class WarsController < ApplicationController
       if @plan.select { |p| p[:index] == i && p[:state] != 'no' }.empty?
         @missing.append("#index_#{i}")
       end
-      if @plan.select { |p| p[:base] == i && p[:state] != 'no' }.empty?
+      if @plan.select { |p| p[:base] == i && %w(sure sug).include?(p[:state]) }.empty?
         @missing.append("#base_#{i}")
       end
     end
