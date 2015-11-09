@@ -94,6 +94,16 @@ class WarsController < ApplicationController
       next if taken[w][b]
       @plan.append({index: w.index, base: b, state: 'sug'})
     end
+    @missing = Array.new
+    @war.count.times do |i|
+      i += 1
+      if @plan.select { |p| p[:index] == i }.empty?
+        @missing.append("#index_#{i}")
+      end
+      if @plan.select { |p| p[:base] == i }.empty?
+        @missing.append("#base_#{i}")
+      end
+    end
     render :ajax_plan
   end
   

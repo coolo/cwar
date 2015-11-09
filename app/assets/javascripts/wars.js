@@ -23,12 +23,14 @@ function renderAttack(at) {
 }
 
 function renderPlan(data) {
-    console.log("renderPlan");
     $('.no-attack').removeClass('no-attack');
     $('.sure-attack').removeClass('sure-attack');
     $('.sug-attack').removeClass('sug-attack');
     $.each(data['attacks'],
 	   function(index, value) { renderAttack(value); });
+    $('.missing-base').removeClass('missing-base');
+    $.each(data['missing'],
+	   function(index, value) { $(value).addClass('missing-base'); });
 }
 
 function setupPlan() {

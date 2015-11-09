@@ -42,6 +42,7 @@ class War < ActiveRecord::Base
       while next_base <= self.count && (taken[w][next_base] == "no" || attacked[next_base] || w.average(next_base-1) < 2.5)
         next_base += 1
       end
+      next if next_base > self.count
       attacked[next_base] = 1
       @ret[w] = next_base
     end

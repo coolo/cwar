@@ -7,11 +7,11 @@
   %thead
     %td Name
     - @war.count.times do |i|
-      %td= i +1
+      %td{id: "base_#{i+1}"}= i +1
   %tbody
     - @warriors.each do |w|
       %tr
-        %td.bg-success= "#{w.index}. #{w.user_name}"
+        %td.bg-success{id: "index_#{w.index}"}= "#{w.index}. #{w.user_name}"
         - w.averages.each_with_index do |e,base|
           - marked = 'attack'
           - id = "#{w.index}_#{base+1}"
