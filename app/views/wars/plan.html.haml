@@ -2,7 +2,8 @@
   Plan für Krieg
   = @war.title
 
-%table.table
+%table.table{id: 'plan', data: {'post-url': update_attack_war_path(@war),
+             'get-url': ajax_plan_war_path(@war) }}
   %thead
     %td Name
     - @war.count.times do |i|
@@ -12,11 +13,9 @@
       %tr
         %td.bg-success= "#{w.index}. #{w.user_name}"
         - w.averages.each_with_index do |e,base|
-          - marked = ''
+          - marked = 'attack'
           - id = "#{w.index}_#{base+1}"
-          - if @plan.include? id
-            - marked = 'bg-info'
-          %td{class: marked, id: "T_#{id}"}
+          %td{class: 'attack', id: "T_#{id}", data: { index: w.index, base: base + 1}}
             .avg= e.to_s.gsub('.0','')
           - tt = "<ul class='estimate-list'>"
           - w.each_estimate(base+1) do |b|
@@ -24,3 +23,5 @@
           - tt << "</ul>"
           %script
             $("#T_#{id} div.avg").tooltip({'title': "#{tt.html_safe}", html: true });
+
+= javascript_tag "setupPlan();"

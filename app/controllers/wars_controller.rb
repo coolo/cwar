@@ -1,5 +1,6 @@
 class WarsController < ApplicationController
-  before_action :set_war, only: [:show, :edit, :update, :destroy, :plan]
+  before_action :set_war, only: [:show, :edit, :update, :destroy,
+                                 :plan, :update_attack, :ajax_plan]
 
   # GET /wars
   # GET /wars.json
@@ -64,22 +65,50 @@ class WarsController < ApplicationController
     end
   end
 
+  def update_attack
+    @warriors.each do |w|
+      next unless w.index.to_s == params[:index]
+      if params[:state] == 'def'
+        w.plans.where(base: params[:base]).delete_all
+      else
+        plan = w.plans.find_or_create_by(base: params[:base])
+        plan.state = params[:state]
+        plan.save
+      end
+    end
+    set_war
+    ajax_plan
+  end
+
+  def ajax_plan
+    @plan = Array.new
+    taken = Hash.new
+    @warriors.each do |w|
+      taken[w] = Array.new(@war.count, nil)
+      w.plans.each do |p|
+        @plan.append({index: w.index, base: p.base, state: p.state})
+        taken[w][p.base] = p.state
+      end
+    end
+    @war.strategy(taken).each do |w,b|
+      next if taken[w][b]
+      @plan.append({index: w.index, base: b, state: 'sug'})
+    end
+    render :ajax_plan
+  end
+  
   def plan
-    @warriors = @war.warriors
-    @warriors.each_with_index do |w,i|
-      w.index = i + 1
-    end
-    sorted = @warriors.sort { |a,b| b.index_avg <=> a.index_avg }
     @plan = []
-    @war.count.times do |i|
-      @plan.append("#{sorted[i].index}_#{i+1}")
-    end
   end
   
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_war
-      @war = War.includes(:warriors, warriors: :estimates).find(params[:id])
+      @war = War.includes(:warriors, warriors: [:estimates, :plans]).find(params[:id])
+      @warriors = @war.warriors
+      @warriors.each_with_index do |w,i|
+        w.index = i + 1
+      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

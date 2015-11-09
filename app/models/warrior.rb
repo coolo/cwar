@@ -1,7 +1,8 @@
 class Warrior < ActiveRecord::Base
    belongs_to :user
    belongs_to :war
-
+   
+   has_many :plans
    has_many :estimates
    attr_reader :user_name
 

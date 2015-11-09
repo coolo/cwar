@@ -20,4 +20,31 @@ class War < ActiveRecord::Base
     super
   end
 
+  def _warrior_busy(bases)
+    bases.each do |b|
+      return true if b
+    end
+    false
+  end
+  
+  def strategy(taken)
+    @ret = Hash.new
+    sorted = self.warriors.sort { |a,b| b.index_avg <=> a.index_avg }
+    attacked = Array.new
+    taken.each do |w, bases|
+      bases.each_with_index do |b,index|
+        attacked[index] = 1 if b == 'sure'
+      end
+    end
+    sorted.each do |w|
+      next if _warrior_busy(taken[w])
+      next_base = 1
+      while next_base < self.count && (attacked[next_base] || w.average(next_base-1) < 2.5)
+        next_base += 1
+      end
+      attacked[next_base] = 1
+      @ret[w] = next_base
+    end
+    @ret
+  end
 end
