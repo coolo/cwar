@@ -97,10 +97,10 @@ class WarsController < ApplicationController
     @missing = Array.new
     @war.count.times do |i|
       i += 1
-      if @plan.select { |p| p[:index] == i }.empty?
+      if @plan.select { |p| p[:index] == i && p[:state] != 'no' }.empty?
         @missing.append("#index_#{i}")
       end
-      if @plan.select { |p| p[:base] == i }.empty?
+      if @plan.select { |p| p[:base] == i && p[:state] != 'no' }.empty?
         @missing.append("#base_#{i}")
       end
     end
