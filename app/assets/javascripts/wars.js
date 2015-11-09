@@ -72,9 +72,11 @@ function setupStartedWar() {
 		     base: $('#enemy-index').val(),
 		     percent: $('#percent').val(),
 		     townhall: $('#townhall').prop('checked')
+		   },
+		   function(data) {
+		       $.get($('#plan').data('get-url'), renderPlan);
 		   });
 	    $('#finishedModal').modal('hide');
-	    $.get($('#plan').data('get-url'), renderPlan);
 	});
 				 
 	$('.attack').click(function() {
