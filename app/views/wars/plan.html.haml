@@ -13,7 +13,7 @@
   %tbody
     - @warriors.each do |w|
       %tr
-        %td.bg-success{id: "index_#{w.index}", data: { name: w.user_name }}= "#{w.index}. #{w.user_name}"
+        %td.bg-success{id: "index_#{w.index}", data: { name: w.user_name, wid: w.id }}= "#{w.index}. #{w.user_name}"
         - w.averages.each_with_index do |e,base|
           - marked = 'attack'
           - id = "#{w.index}_#{base+1}"
@@ -49,7 +49,7 @@
 
       = form_for @war, url: {action: "result"} do |f|
         .modal-body
-          %input{type: "hidden", class: "form-control", disabled: 1, id: "warrior-index"}
+          %input{type: "hidden", class: "form-control", disabled: 1, id: "warrior-id"}
           %input{type: "hidden", class: "form-control", disabled: 1, id: "enemy-index"}
           .form-group
             <label for="percent" class="control-label">Prozent:</label>

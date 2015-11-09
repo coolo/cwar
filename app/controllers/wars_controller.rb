@@ -1,6 +1,7 @@
 class WarsController < ApplicationController
   before_action :set_war, only: [:show, :edit, :update, :destroy,
-                                 :plan, :update_attack, :ajax_plan, :freeze]
+                                 :plan, :update_attack, :ajax_plan,
+                                 :freeze, :result]
 
   # GET /wars
   # GET /wars.json
@@ -86,7 +87,9 @@ class WarsController < ApplicationController
     @warriors.each do |w|
       taken[w] = Array.new(@war.count, nil)
       w.plans.each do |p|
-        @plan.append({index: w.index, base: p.base, state: p.state})
+        hash = {index: w.index, base: p.base, state: p.state}
+        hash[:stars] = p.stars
+        @plan.append(hash)
         taken[w][p.base] = p.state
       end
     end
@@ -130,6 +133,19 @@ class WarsController < ApplicationController
   end
 
   def result
+    plan = Plan.where(warrior_id: params[:index], base: params[:base]).first_or_create
+    plan.state = 'done'
+    plan.th = params[:townhall] == 'true'
+    plan.percent = params[:percent]
+    plan.stars = 0
+    if plan.percent == 100
+      plan.stars = 3
+      plan.th = true
+    elsif plan.percent >= 50
+      plan.stars = 1
+      plan.stars += 1 if plan.th
+    end
+    plan.save
     render json: {}
   end
   
