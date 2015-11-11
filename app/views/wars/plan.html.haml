@@ -5,7 +5,7 @@
     (angefangen)
 
 %table.table{id: 'plan', data: {'post-url': update_attack_war_path(@war),
-             'get-url': ajax_plan_war_path(@war) }}
+             'get-url': ajax_plan_war_path(@war) }, class: 'table table-bordered table-hover'}
   %thead
     %td Name
     - @war.count.times do |i|
