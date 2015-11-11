@@ -14,6 +14,11 @@ class MainController < ApplicationController
     redirect_to :current
   end
 
+  def logout
+    session.delete :current_user_id
+    redirect_to :current
+  end
+  
   def current_plan
     redirect_to plan_war_path(War.last)
   end
