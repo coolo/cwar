@@ -1,7 +1,7 @@
 class WarsController < ApplicationController
   before_action :set_war, only: [:show, :edit, :update, :destroy,
                                  :plan, :update_attack, :ajax_plan,
-                                 :freeze, :result, :done]
+                                 :freeze, :result, :done, :set_done]
 
   # GET /wars
   # GET /wars.json
@@ -131,7 +131,7 @@ class WarsController < ApplicationController
     @plan = []
   end
 
-  def done
+  def set_done
     unless @war.done
       redirect_to :current unless @war.started and
         session[:current_user_id] and User.find(session[:current_user_id]).name == 'Troyz'
@@ -146,8 +146,12 @@ class WarsController < ApplicationController
       @war.done = true
       @war.save
     end
+    redirect_to done_war_path(@war)
   end
   
+  def done
+  end
+
   def freeze
     taken = _calc_plan
     @war.strategy(taken).each do |w,b|

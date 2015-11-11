@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   resources :wars do
     member do
       get 'plan'
+      patch 'set_done'
       patch 'freeze'
       post 'result'
       post 'update_attack'
