@@ -1,0 +1,17 @@
+- @war.warriors.each do |w|
+  - w.plans.where(state: 'done').each do |p|
+    %h4
+      Angriff von
+      = w.user_name
+      auf
+      = p.base
+      ergab:
+      = p.stars
+    %ul
+      - w.estimates.where(base: p.base).each do |e|
+        %li
+          = e.user.name
+          schätze
+          = e.stars
+            
+          

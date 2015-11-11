@@ -24,6 +24,9 @@ class MainController < ApplicationController
     end
     @user = User.find(session[:current_user_id])
     @war = War.last
+    if @war.started
+      redirect_to plan_war_path(@war) and return
+    end
     @estimates = Hash.new
     @war.warriors.each do |w|
       @estimates[w] = { 0 => [], 1 => [], 2 => [], 3 => [] }

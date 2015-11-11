@@ -18,6 +18,7 @@ Rails.application.routes.draw do
       post 'result'
       post 'update_attack'
       get 'ajax_plan'
+      get 'done'
     end
   end
 
