@@ -4,7 +4,6 @@ class Warrior < ActiveRecord::Base
    
    has_many :plans
    has_many :estimates
-   attr_reader :user_name
 
    def index
      @index

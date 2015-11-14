@@ -1,5 +1,6 @@
 - @war.warriors.each do |w|
-  - w.plans.where(state: 'done').each do |p|
+  - w.plans.each do |p|
+    - next unless p.state == 'done'
     %h4
       Angriff von
       = w.user_name
@@ -8,10 +9,9 @@
       ergab:
       = p.stars
     %ul
-      - w.estimates.where(base: p.base).each do |e|
+      - w.estimates.each do |e|
+        - next if e.base != p.base
         %li
-          = e.user.name
+          = e.user_name
           schätzte
           = e.stars
-            
-          

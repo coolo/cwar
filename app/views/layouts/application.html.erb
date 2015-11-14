@@ -1,10 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Cwar</title>
+  <title>COC Wars Planning</title>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
+  <%= javascript_tag do %>
+  $(document).ready(function() {
+  <%= content_for :ready_function %>
+  });
+  <% end if content_for(:ready_function) %>
 </head>
 <body>
 

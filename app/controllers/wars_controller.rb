@@ -74,6 +74,7 @@ class WarsController < ApplicationController
       else
         plan = w.plans.find_or_create_by(base: params[:base])
         plan.state = params[:state]
+        plan.user = @user
         plan.save
       end
     end
@@ -132,24 +133,28 @@ class WarsController < ApplicationController
   end
 
   def set_done
-    unless @war.done
-      redirect_to :current unless @war.started and
-        session[:current_user_id] and User.find(session[:current_user_id]).name == 'Troyz'
-      @war.warriors.each do |w|
-        keep = Array.new
-        w.plans.each do |p|
-          keep << w.estimates.where(base: p.base).all
-        end
-        keep.flatten!
-        w.estimates.where.not(id: keep).delete_all
-      end
-      @war.done = true
-      @war.save
+    unless @war.started && @user.name == 'Troyz'
+      Rails.logger.error "not allowing set_done for #{@user.name}"
+      redirect_to :current and return
     end
+
+    @war.warriors.each do |w|
+      keep = Array.new
+      w.plans.each do |p|
+        keep << w.estimates.where(base: p.base).all
+      end
+      keep.flatten!
+      w.estimates.where.not(id: keep).delete_all
+    end
+    @war.done = true
+    @war.save
     redirect_to done_war_path(@war)
   end
   
   def done
+    unless @war.done
+      redirect_to :current
+    end
   end
 
   def freeze
@@ -167,6 +172,7 @@ class WarsController < ApplicationController
   def result
     plan = Plan.where(warrior_id: params[:index], base: params[:base]).first_or_create
     plan.state = 'done'
+    plan.user = @user
     plan.th = params[:townhall] == 'true'
     plan.percent = params[:percent]
     plan.stars = 0

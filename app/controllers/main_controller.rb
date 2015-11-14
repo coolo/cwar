@@ -1,5 +1,7 @@
 class MainController < ApplicationController
 
+  skip_before_filter :require_user, :only => [:index, :set_user]
+  
   def index
     if session[:current_user_id]
       redirect_to :current
@@ -7,7 +9,7 @@ class MainController < ApplicationController
       @user = User.new
     end
   end
-
+  
   def set_user
     @user = User.find(params[:user][:id])
     session[:current_user_id] = @user.id
@@ -16,18 +18,21 @@ class MainController < ApplicationController
 
   def logout
     session.delete :current_user_id
-    redirect_to :current
+    redirect_to :index
   end
   
   def current_plan
-    redirect_to plan_war_path(War.last)
+    war=War.last
+    if war.started
+      redirect_to plan_war_path(war)
+    elsif war.done
+      redirect_to done_war_path(war)
+    else
+      redirect_to :current
+    end
   end
 
   def war
-    if !session[:current_user_id]
-       redirect_to :index and return
-    end
-    @user = User.find(session[:current_user_id])
     @war = War.last
     if @war.started
       redirect_to plan_war_path(@war) and return
@@ -59,7 +64,6 @@ class MainController < ApplicationController
   
   def estimate
     @war = War.find(params[:war_id])
-    @user = User.find(session[:current_user_id])
     @war.warriors.each do |w|
       estimates = Hash.new
       @war.warriors.size.times { |i| estimates[i+1] = 0 }

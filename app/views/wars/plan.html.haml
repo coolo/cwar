@@ -4,8 +4,11 @@
   - if @war.started
     (angefangen)
 
+- content_for :ready_function do
+  $('#plan').removeClass('hide');
+  
 %table.table{id: 'plan', data: {'post-url': update_attack_war_path(@war),
-             'get-url': ajax_plan_war_path(@war) }, class: 'table table-bordered table-hover'}
+             'get-url': ajax_plan_war_path(@war) }, class: 'table table-bordered table-hover hide'}
   %thead
     %td Name
     - @war.count.times do |i|
@@ -20,11 +23,14 @@
           %td{class: "text-center attack base_#{base + 1}", id: "T_#{id}", data: { index: w.index, base: base + 1}}
             .avg= e.to_s.gsub('.0','')
           - tt = "<ul class='estimate-list'>"
+          - estimates = 0
           - w.each_estimate(base+1) do |b|
             - tt << "<li>#{b.stars} #{User.name_for(b.user_id)}</li>"
+            - estimates += 1
           - tt << "</ul>"
-          %script
-            $("#T_#{id} div.avg").tooltip({'title': "#{tt.html_safe}", html: true });
+          - if estimates > 0
+            - content_for :ready_function do
+              $("#T_#{id} div.avg").tooltip({'title': "#{tt.html_safe}", html: true });
 
 - unless @war.started
   = javascript_tag "setupPlan();"
@@ -47,12 +53,12 @@
           %span{id: 'enemy-name'}
           ein.
 
-      = form_for @war, url: {action: "result"} do |f|
+      = form_tag({ action: "result" }, { id: 'result_form' }) do
         .modal-body
           %input{type: "hidden", class: "form-control", disabled: 1, id: "warrior-id"}
           %input{type: "hidden", class: "form-control", disabled: 1, id: "enemy-index"}
           .form-group
-            <label for="percent" class="control-label">Prozent:</label>
+            <label for="percent" name="percent" class="control-label">Prozent:</label>
             %input{type: "text", class: "form-control", id: "percent"}
 
           .form-group
@@ -62,4 +68,4 @@
 
         .modal-footer
           <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
-          = f.submit 'Speichern', type: 'button', class: "btn btn-primary", id: 'submit_result'
+          = submit_tag 'Speichern', class: "btn btn-primary", id: 'submit_result'

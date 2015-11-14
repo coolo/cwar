@@ -65,7 +65,9 @@ function setupPlan() {
 
 function setupStartedWar() {
     $(document).ready( function() {
-	$('#submit_result').click(function(e){
+	$('#result_form').submit(function(e){
+	    e.preventDefault();
+	    alert('submit?');
 	    e.preventDefault();
 	    $.post($('#finishedModal form').attr('action'),
 		   { index: $('#warrior-id').val(),
