@@ -1,7 +1,7 @@
 %div{class: 'jumbotron'}
   %h1 Hallo Clashers
 
-  %p Ich möchte mal ein Experiment wagen. Dazu brauche ich so viele Stimmen wie möglich. Also sag mir erst einmal wie Du im Spiel heisst.
+  %p Wir brauchen deinen Namen. Bitte nutze deinen 1. Account
 
 = form_for @user, url: { action: "set_user"},
   html: { class: 'form-horizontal', role: 'form' } do |f|
@@ -10,7 +10,12 @@
       Name im Spiel:
     = f.select(:id, { class: "form-control" }) do
       - array = User.order(:name).all.map { |user| [user.name, user.id] }
-      = options_for_select(array)
+      = options_for_select(array, params[:user])
+  - if params[:password_required]
+    .form-group
+      = f.label :password, { class: 'control-label' } do
+        Password:
+      = f.password_field :password
   %p.help-block Damit wir wissen, wer aus dem Clan du bist
   = f.submit "Submit", class: "btn btn-default"
 

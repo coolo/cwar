@@ -12,6 +12,11 @@ class MainController < ApplicationController
   
   def set_user
     @user = User.find(params[:user][:id])
+    if @user.password && @user.password != params[:user][:password]
+      Rails.logger.debug "Password '#{@user.password}' != '#{params[:user][:password]}'"
+      redirect_to action: :index, password_required: 1, user: @user.id
+      return
+    end
     session[:current_user_id] = @user.id
     redirect_to :current
   end

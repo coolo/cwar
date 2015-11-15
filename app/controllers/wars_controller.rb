@@ -2,7 +2,14 @@ class WarsController < ApplicationController
   before_action :set_war, only: [:show, :edit, :update, :destroy,
                                  :plan, :update_attack, :ajax_plan,
                                  :freeze, :result, :done, :set_done]
+  before_action :require_password, only: [:edit, :index, :create, :update, :freeze]
 
+  def require_password
+    unless @user.password
+      redirect_to :index
+    end
+  end
+  
   # GET /wars
   # GET /wars.json
   def index

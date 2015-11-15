@@ -32,8 +32,9 @@
 - unless @war.started
   - content_for :ready_function do
     setupPlan();
-  = form_for @war, url: {action: "freeze"} do |f|
-    = f.submit "Freeze Plan", data: { confirm: "Sicher? Es gibt kein zurück." }
+  - if @user.password
+    = form_for @war, url: {action: "freeze"} do |f|
+      = f.submit "Freeze Plan", data: { confirm: "Geht's los?" }
 - else
   - content_for :ready_function do
     setupStartedWar();
