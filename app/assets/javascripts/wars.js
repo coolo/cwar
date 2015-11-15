@@ -20,7 +20,7 @@ function renderAttack(at) {
     } else if (at['state'] == 'done') {
 	td.addClass('done-attack');
 	td.text(at['stars'] + "*");
-	if (at['stars'] == 3 && hide_done) {
+	if (hide_done && at['stars'] == 3) {
 	    $(".base_" + at['base']).hide();
 	}
     } else {
