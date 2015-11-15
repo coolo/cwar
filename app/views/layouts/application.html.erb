@@ -6,8 +6,8 @@
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
   <%= javascript_tag do %>
-  $(document).ready(function() {
-  <%= content_for :ready_function %>
+  $(document).on('ready', function() {
+  <%= yield :ready_function %>
   });
   <% end if content_for(:ready_function) %>
 </head>

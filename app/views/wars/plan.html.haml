@@ -3,9 +3,6 @@
   = @war.title
   - if @war.started
     (angefangen)
-
-- content_for :ready_function do
-  $('#plan').removeClass('hide');
   
 %table.table{id: 'plan', data: {'post-url': update_attack_war_path(@war),
              'get-url': ajax_plan_war_path(@war) }, class: 'table table-bordered table-hover hide'}
@@ -33,11 +30,16 @@
               $("#T_#{id} div.avg").tooltip({'title': "#{tt.html_safe}", html: true });
 
 - unless @war.started
-  = javascript_tag "setupPlan();"
+  - content_for :ready_function do
+    setupPlan();
   = form_for @war, url: {action: "freeze"} do |f|
     = f.submit "Freeze Plan", data: { confirm: "Sicher? Es gibt kein zurück." }
 - else
-  = javascript_tag "setupStartedWar();"
+  - content_for :ready_function do
+    setupStartedWar();
+
+- content_for :ready_function do
+  $('#plan').removeClass('hide');
 
 %div{class: "modal fade", id: "finishedModal", role: "dialog", 'aria-labelledby': "exampleModalLabel"}
   %div{class: "modal-dialog", role: "document"}

@@ -43,7 +43,6 @@ function renderPlan(data) {
 }
 
 function setupPlan() {
-    $(document).ready( function() {
 	$('.attack').click(function() {
 	    var state = 'def';
 	    if ($(this).hasClass('no-attack')) {
@@ -60,11 +59,9 @@ function setupPlan() {
 	    return false;
 	});
 	$.get($('#plan').data('get-url'), renderPlan);
-    });
 }
 
 function setupStartedWar() {
-    $(document).ready( function() {
 	$('#result_form').submit(function(e){
 	    e.preventDefault();
 	    alert('submit?');
@@ -89,5 +86,4 @@ function setupStartedWar() {
 	    $('#finishedModal').modal('show');
 	});
 	$.get($('#plan').data('get-url'), renderPlan);
-    });
 }
