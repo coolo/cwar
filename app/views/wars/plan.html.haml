@@ -3,9 +3,11 @@
   = @war.title
   - if @war.started
     (angefangen)
-  
+
+- content_for :ready_function, "var hide_done = #{params[:nohide] ? 'true' : 'false'};"
+
 %table.table{id: 'plan', data: {'post-url': update_attack_war_path(@war),
-             'get-url': ajax_plan_war_path(@war) }, class: 'table table-bordered table-hover hide'}
+           'get-url': ajax_plan_war_path(@war) }, class: 'table table-bordered table-hover hide'}
   %thead
     %td Name
     - @war.count.times do |i|

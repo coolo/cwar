@@ -20,7 +20,7 @@ function renderAttack(at) {
     } else if (at['state'] == 'done') {
 	td.addClass('done-attack');
 	td.text(at['stars'] + "*");
-	if (at['stars'] == 3) {
+	if (at['stars'] == 3 && hide_done) {
 	    $(".base_" + at['base']).hide();
 	}
     } else {
@@ -37,8 +37,10 @@ function renderPlan(data) {
     $('.missing-base').removeClass('missing-base');
     $.each(data['missing'],
 	   function(index, value) { $(value).addClass('missing-base'); });
-    $.each(data['finished'],
-	   function(index, value) { $('.index_' + value).hide() });
+    if (hide_done) {
+	$.each(data['finished'],
+	       function(index, value) { $('.index_' + value).hide() });
+    }
     
 }
 
