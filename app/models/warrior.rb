@@ -5,6 +5,8 @@ class Warrior < ActiveRecord::Base
    has_many :plans
    has_many :estimates
 
+   default_scope { order(:order) }
+   
    def index
      @index
    end
