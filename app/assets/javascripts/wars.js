@@ -36,7 +36,7 @@ function renderPlan(data) {
 	   function(index, value) { renderAttack(value); });
     $('.missing-base').removeClass('missing-base');
     $.each(data['missing'],
-	   function(index, value) { $(value).addClass('missing-base'); });
+	   function(index, value) { $(value).addClass('missing-base').removeClass('text-muted'); });
     if (hide_done) {
 	$.each(data['finished'],
 	       function(index, value) { $('.index_' + value).hide() });

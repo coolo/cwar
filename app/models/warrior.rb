@@ -43,7 +43,15 @@ class Warrior < ActiveRecord::Base
      end
      @index_avg = Integer((sum / averages.size) * 100 + 1)
    end
-   
+
+   def done_attacks
+    done = 0
+    plans.each do |p|
+      done += 1 if p.state == 'done'
+    end
+    done
+  end
+
    private
    
    def calc_averages

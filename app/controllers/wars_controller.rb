@@ -112,9 +112,11 @@ class WarsController < ApplicationController
     end
 
     @missing = Array.new
+    done_bases = Array.new
     nr_finished = Hash.new
     @plan.select { |p| p[:state] == 'done' }.each do |p|
       nr_finished[p[:index]] = (nr_finished[p[:index]] || 0) + 1
+      done_bases << p[:base] if p[:stars] == 3
     end
     @finished = Array.new
     nr_finished.each { |index, nr|
@@ -125,10 +127,13 @@ class WarsController < ApplicationController
       if @plan.select { |p| p[:index] == i && p[:state] != 'no' }.empty?
         @missing.append("#index_#{i}")
       end
+      
       if @plan.select { |p| p[:base] == i && %w(sure sug).include?(p[:state]) }.empty?
+        next if done_bases.include? i
         @missing.append("#base_#{i}")
       end
     end
+    Rails.logger.debug "M #{@missing.inspect}"
     render :ajax_plan
   end
   

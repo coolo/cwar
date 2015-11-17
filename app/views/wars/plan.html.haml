@@ -15,7 +15,9 @@
   %tbody
     - @warriors.each do |w|
       %tr{class: "index_#{w.index}"}
-        %td{class: 'bg-success text-nowrap text-muted', id: "index_#{w.index}", data: { name: w.user_name, wid: w.id }}= "#{w.index}. #{w.user_name}"
+        - done = w.done_attacks
+        - done = done > 0 ? " (#{w.done_attacks})" : ''
+        %td{class: 'bg-success text-nowrap text-muted', id: "index_#{w.index}", data: { name: w.user_name, wid: w.id }}= "#{w.index}. #{w.user_name} #{done}"
         - w.averages.each_with_index do |e,base|
           - marked = 'attack'
           - id = "#{w.index}_#{base+1}"
