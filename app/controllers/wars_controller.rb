@@ -133,7 +133,6 @@ class WarsController < ApplicationController
         @missing.append("#base_#{i}")
       end
     end
-    Rails.logger.debug "M #{@missing.inspect}"
     render :ajax_plan
   end
   

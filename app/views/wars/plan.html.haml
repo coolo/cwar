@@ -2,7 +2,7 @@
   Plan für Krieg
   = @war.title
   - if @war.started
-    (angefangen)
+    = "(angefangen, #{@war.current_score}*)"
 
 - content_for :ready_function, "hide_done = #{params[:nohide] ? 'false' : 'true'};"
 

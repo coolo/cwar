@@ -20,6 +20,17 @@ class War < ActiveRecord::Base
     super
   end
 
+  def current_score
+    score = 0
+    bases = Array.new(self.count + 1, 0)
+    warriors.each do |w|
+      w.plans.each do |p|
+        bases[p.base] = [p.stars, bases[p.base]].max if p.state == 'done'
+      end
+    end
+    bases.sum
+  end
+      
   def _warrior_busy(bases)
     bases.each do |b|
       return true if b == 'sure'
