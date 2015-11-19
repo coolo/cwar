@@ -66,7 +66,7 @@ class Warrior < ActiveRecord::Base
      end
      war.count.times do |i|
        if count[i] > 0
-         @averages[i] = (sums[i] / count[i] * 10).to_i / 10.0
+         @averages[i] = ((sums[i] / count[i] * 10).to_i / 10.0 + 0.55).floor
        else
          @averages[i] = 0
        end
