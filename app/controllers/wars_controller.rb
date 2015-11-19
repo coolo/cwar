@@ -98,7 +98,7 @@ class WarsController < ApplicationController
         hash = {index: w.index, base: p.base, state: p.state}
         hash[:stars] = p.stars if p.state == 'done'
         @plan.append(hash)
-        taken[w][p.base] = p.state
+        taken[w][p.base] = p.state unless p.state == 'done' && p.stars != 3
       end
     end
     taken
